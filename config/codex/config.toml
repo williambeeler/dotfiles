@@ -1,0 +1,7 @@
+model = "gpt-5.4"
+model_reasoning_effort = "medium"
+
+# Add machine-specific trusted projects locally as needed.
+# Example:
+# [projects."/Users/yourname/Sites/project-name"]
+# trust_level = "trusted"
