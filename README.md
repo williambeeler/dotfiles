@@ -20,13 +20,6 @@ bin/install
 
 ## What's Included
 
-### Shell & Prompt
-
-- **Oh My Zsh** - Framework for managing Zsh configuration (with agnoster theme by default)
-- **zoxide** - Smart directory jumping based on frecency
-- **fzf** - Fuzzy finder for files and history
-- **direnv** - Automatic environment variables per directory
-
 ### Modern CLI Tools
 
 - **fnm** - Fast Node.js version manager
@@ -61,11 +54,9 @@ The installation creates symlinks from your home directory to the dotfiles repos
 
 | Symlink Location | Points To | Purpose |
 |-----------------|-----------|---------|
-| `~/.zshrc` | `~/.dotfiles/home/.zshrc` | Main Zsh configuration (Oh My Zsh with custom agnoster theme) |
+| `~/.zshrc` | `~/.dotfiles/home/.zshrc` | Main Zsh configuration |
 | `~/.gitconfig` | `~/.dotfiles/home/.gitconfig` | Git configuration with delta diff viewer |
 | `~/.global-gitignore` | `~/.dotfiles/home/.global-gitignore` | Global Git ignore patterns |
-| `~/.vimrc` | `~/.dotfiles/home/.vimrc` | Vim configuration |
-| `~/.vim/` | `~/.dotfiles/home/.vim/` | Vim runtime files |
 | `~/.mackup.cfg` | `~/.dotfiles/macos/.mackup.cfg` | Mackup backup configuration |
 | `~/.codex/skills` | `~/.dotfiles/config/codex/skills/` | All Codex skills (version-controlled) |
 | `~/.codex/AGENTS.md` | `~/.dotfiles/config/codex/AGENTS.md` | Codex configuration |
@@ -90,24 +81,6 @@ These files are loaded by `.zshrc` but remain in the dotfiles directory:
 - `home/.aliases` - Shell command aliases
 - `home/.functions` - Custom shell functions
 - `home/.exports` - Environment variables
-
-### Custom Agnoster Theme
-
-The default configuration uses a customized agnoster theme stored in `oh-my-zsh-custom/themes/agnoster.zsh-theme`:
-
-**Customizations:**
-- No git branch symbol (cleaner look)
-- Uses `•` for unstaged changes instead of `±`
-- Powerline arrows for segment separators
-- Requires a font with powerline glyphs
-
-**Git Status Symbols:**
-- `✚` - Staged changes (files added with `git add`)
-- `•` - Unstaged changes (modified files not yet staged)
-- Yellow background - Uncommitted changes
-- Green background - Clean working directory
-
----
 
 ## Daily Usage
 
@@ -150,7 +123,7 @@ brew upgrade composer # Update Composer
 All Homebrew packages are declared in `config/Brewfile`. To add a new tool:
 
 ```bash
-echo 'brew "neovim"' >> ~/.dotfiles/config/Brewfile
+echo 'brew "visual-studio-code"' >> ~/.dotfiles/config/Brewfile
 brew bundle --file=~/.dotfiles/config/Brewfile
 ```
 
@@ -222,7 +195,7 @@ Create custom configurations that won't be committed:
 
 ```bash
 mkdir -p ~/.dotfiles-custom/shell
-vim ~/.dotfiles-custom/shell/.aliases
+code ~/.dotfiles-custom/shell/.aliases
 ```
 
 These files are automatically loaded by `.zshrc` if they exist.
@@ -279,13 +252,11 @@ The `bin/` directory contains helper scripts:
 If upgrading from an older setup:
 
 1. **Directory history**: Run `migration/migrate-z-to-zoxide.sh` to import your `~/.z` data
-2. **Prompt**: The default is now Oh My Zsh with custom agnoster theme
-3. **Version managers**:
+2. **Version managers**:
    - fnm replaces nvm for Node.js
    - Homebrew manages PHP/Composer (no more compilation or mise)
-4. **Terminal**: Ghostty replaces iTerm2 (config symlinked from dotfiles)
-5. **Codex Skills**: Now version-controlled in `config/codex/skills/` and symlinked to `~/.codex/skills`
-6. **Custom Theme**: Custom agnoster theme stored in `oh-my-zsh-custom/themes/`
+3. **Terminal**: Ghostty config can be symlinked from dotfiles if you use Ghostty
+4. **Codex Skills**: Now version-controlled in `config/codex/skills/` and symlinked to `~/.codex/skills`
 
 ---
 
