@@ -1,267 +1,172 @@
 # My dotfiles
 
-Personal dotfiles with modern shell tooling, optimized for Laravel/PHP development. Features fast startup times, smart directory navigation, and modern CLI tools.
+![Screenshot of My Terminal](./media/my-terminal.png)
 
-## Key Features
+This repo is a practical machine setup for macOS. It keeps a version controlled snapshot of the tools, Codex configuration, Git settings, Terminal.app appearance, and a few shell shortcuts I want to carry from one Mac to the next.
 
-(Fill this in)
+It is intentionally smaller than the original repo it came from. The goal is not to manage everything. The goal is to preserve the parts I actually use and make them easy to reinstall after a clean OS setup.
 
----
+## What This Repo Manages
+
+| Area | Stored here | Why it matters |
+|------|-------------|----------------|
+| Homebrew packages | `config/Brewfile` | Reinstall formulae, casks, and VS Code extensions |
+| Codex setup | `config/codex/` | Keep AGENTS instructions, skills, and Codex config in version control |
+| Terminal.app appearance | `home/terminal.plist` | Restore the Terminal look and profile settings I like |
+| Git defaults | `home/.gitconfig`, `home/.global-gitignore` | Carry Git behavior and global ignore rules across machines |
+| Shell shortcuts | `home/.aliases` | Keep useful Laravel, Git, and macOS aliases nearby |
 
 ## Quick Start
 
+1. Clone the repo.
+
 ```bash
-git clone git@github.com:freekmurze/dotfiles.git ~/.dotfiles
+git clone git@github.com:williambeeler/dotfiles.git
 cd ~/.dotfiles
-bin/install
 ```
 
----
-
-## What's Included
-
-### Modern CLI Tools
-
-- **fnm** - Fast Node.js version manager
-- **bat** - Cat with syntax highlighting
-- **eza** - Modern ls replacement with icons
-- **ripgrep** - Fast grep alternative
-- **fd** - Fast find alternative
-- **git-delta** - Better git diffs
-- **jq** - JSON processor and formatter
-- **yq** - YAML processor and formatter
-- **bottom** - Modern system monitor
-
-### Development Tools
-
-- **PHP** - Latest version via Homebrew
-- **Composer** - Dependency manager via Homebrew
-- **Node.js** - LTS version managed via fnm
-- **Laravel Valet** - Local development server
-- **MySQL** - Database with auto-start
-
-### QuickLook Plugins
-
-Instant file previews in Finder: code files, markdown, JSON, CSV, patches, and archives.
-
----
-
-## How It Works
-
-### Symlinked Files
-
-The installation creates symlinks from your home directory to the dotfiles repository. This allows you to version control your configuration while keeping files in their expected locations.
-
-| Symlink Location | Points To | Purpose |
-|-----------------|-----------|---------|
-| `~/.zshrc` | `~/.dotfiles/home/.zshrc` | Main Zsh configuration |
-| `~/.gitconfig` | `~/.dotfiles/home/.gitconfig` | Git configuration with delta diff viewer |
-| `~/.global-gitignore` | `~/.dotfiles/home/.global-gitignore` | Global Git ignore patterns |
-| `~/.mackup.cfg` | `~/.dotfiles/macos/.mackup.cfg` | Mackup backup configuration |
-| `~/.codex/skills` | `~/.dotfiles/config/codex/skills/` | All Codex skills (version-controlled) |
-| `~/.codex/AGENTS.md` | `~/.dotfiles/config/codex/AGENTS.md` | Codex configuration |
-| `~/.codex/laravel-php-guidelines.md` | `~/.dotfiles/config/codex/laravel-php-guidelines.md` | Laravel coding standards |
-| `~/.codex/config.toml` | `~/.dotfiles/config/codex/config.toml` | Codex CLI settings |
-| `~/.config/zed/settings.json` | `~/.dotfiles/config/zed/settings.json` | Zed editor settings |
-| `~/.config/zed/keymap.json` | `~/.dotfiles/config/zed/keymap.json` | Zed custom keybindings |
-| `~/.config/ghostty/config` | `~/.dotfiles/config/ghostty/config` | Ghostty terminal settings |
-
-To manually symlink the Zed configuration (if not using `bin/install`):
+2. Run the installer.
 
 ```bash
-mkdir -p ~/.config/zed
-ln -sf ~/.dotfiles/config/zed/settings.json ~/.config/zed/settings.json
-ln -sf ~/.dotfiles/config/zed/keymap.json ~/.config/zed/keymap.json
+./install.sh
 ```
 
-### Sourced Files
+3. If you are using your own Git identity, open `home/.gitconfig` and replace any inherited name, email, or signing key values.
 
-These files are loaded by `.zshrc` but remain in the dotfiles directory:
+## What `install.sh` Does
 
-- `home/.aliases` - Shell command aliases
-- `home/.functions` - Custom shell functions
-- `home/.exports` - Environment variables
+When you run [install.sh](/Users/grayghost/Sites/dotfiles/install.sh), it performs the current machine bootstrap for this repo.
 
-## Daily Usage
+1. Installs everything listed in `config/Brewfile` with `brew bundle`.
+2. Symlinks the Codex files into `~/.codex`.
+3. Symlinks the Git files into your home directory.
+4. Copies `home/terminal.plist` to `~/terminal.plist`.
+5. Imports the saved Terminal.app preferences.
 
-### Laravel/PHP Shortcuts
+This makes the Brewfile and Terminal backup the canonical machine snapshot.
+
+## Repo Layout
+
+| Path | Purpose |
+|------|---------|
+| `install.sh` | Main install entry point |
+| `backup.sh` | Refreshes the saved machine snapshot |
+| `uninstall.sh` | Removes Brewfile managed packages and cleanup symlinks |
+| `config/Brewfile` | Homebrew formulae, casks, and VS Code extensions |
+| `config/codex/AGENTS.md` | Global Codex working instructions |
+| `config/codex/config.toml` | Codex CLI defaults |
+| `config/codex/skills/` | Version controlled Codex skills |
+| `config/install-codex-symlinks.sh` | Helper that links Codex files into `~/.codex` |
+| `config/install-home-symlinks.sh` | Helper that links Git files into your home directory |
+| `home/.aliases` | Optional shell aliases you can source from your own shell config |
+| `home/.gitconfig` | Git defaults and signing configuration |
+| `home/.global-gitignore` | Global Git ignore rules |
+| `home/terminal.plist` | Saved Terminal.app preferences |
+| `SKILLS_GUIDE.md` | Plain English explanation of the available Codex skills |
+
+## Daily Commands
+
+| Command | What it does |
+|---------|--------------|
+| `./install.sh` | Rebuild the machine setup from this repo |
+| `./backup.sh` | Save the current Terminal settings and Homebrew state back into the repo |
+| `./uninstall.sh` | Remove Brewfile managed apps and linked config files |
+| `brew bundle --file=config/Brewfile` | Reinstall the Brewfile contents manually |
+
+## Laravel Friendly Aliases
+
+The aliases file still leans Laravel and PHP, which is worth keeping because those are the shortcuts I am most likely to use in day to day work.
+
+| Alias | Expands to |
+|------|------------|
+| `a` | `php artisan` |
+| `phpunit` | `vendor/bin/phpunit` |
+| `mfs` | `php artisan migrate:fresh --seed` |
+| `pp` | `php artisan test --parallel` |
+| `cda` | `composer dump-autoload -o` |
+| `nah` | `git reset --hard; git clean -df` |
+
+If I want these aliases active, I should source `~/.dotfiles/home/.aliases` from my personal `~/.zshrc` or other shell config.
+
+## Homebrew Workflow
+
+The Brewfile is treated as a rebuild list for the machine.
+
+1. Install from it with:
 
 ```bash
-a                   # php artisan
-p                   # Run Pest/PHPUnit tests
-c                   # composer
-mfs                 # php artisan migrate:fresh --seed
-nah                 # git reset --hard; git clean -df
-```
-
-
----
-
-## Version Management
-
-### Node.js (via fnm)
-
-```bash
-fnm install --lts     # Install latest LTS
-fnm use lts-latest    # Use latest LTS
-fnm install 20        # Install specific version
-fnm use 20            # Switch to specific version
-fnm list              # Show installed versions
-```
-
-### PHP & Composer (via Homebrew)
-
-```bash
-brew upgrade php      # Update PHP to latest
-brew upgrade composer # Update Composer
-```
-
----
-
-## Package Management
-
-All Homebrew packages are declared in `config/Brewfile`. To add a new tool:
-
-```bash
-echo 'brew "visual-studio-code"' >> ~/.dotfiles/config/Brewfile
 brew bundle --file=~/.dotfiles/config/Brewfile
 ```
 
-**Complete package list:**
+2. Refresh it after installing or removing apps with:
 
-- **Core**: node, php, composer, pkg-config, wget, httpie, ncdu, hub, ack, doctl, 1password-cli, git-secret, imagemagick, mysql, yarn, ghostscript, mackup
-- **Modern CLI**: zoxide, bat, eza, ripgrep, fd, git-delta, fnm, fzf, direnv, jq, yq, bottom, zsh-autosuggestions
-- **QuickLook**: qlcolorcode, qlstephen, qlmarkdown, quicklook-json, qlprettypatch, quicklook-csv, betterzip, suspicious-package
-- **PHP Extensions**: imagick, memcached, xdebug, redis
-- **Global npm**: agent-browser
-- **Global Composer**: laravel/envoy, spatie/phpunit-watcher, laravel/valet
+```bash
+~/.dotfiles/backup.sh
+```
 
----
+3. Commit the updated file so the saved machine snapshot stays current.
+
+Because the Brewfile was generated from the current machine, it may include more than command line tools. It can also include GUI apps and VS Code extensions.
 
 ## Codex Integration
 
-### What's Included
+This repo treats Codex as a first class part of the machine setup.
 
-- **Codex instructions** - `AGENTS.md` with working preferences and GitHub guidance
-- **Codex CLI config** - `config.toml` for model and reasoning defaults
-- **Version-controlled skills** - Entire `~/.codex/skills` directory symlinked to dotfiles
-- **Laravel guidance** - Shared PHP and Laravel coding standards
+| File or folder | Purpose |
+|----------------|---------|
+| `config/codex/AGENTS.md` | Global instructions for how Codex should work with me |
+| `config/codex/config.toml` | Codex model and reasoning defaults |
+| `config/codex/laravel-php-guidelines.md` | Shared Laravel and PHP coding standards |
+| `config/codex/skills/` | Reusable skills for coding, design, marketing, and workflow automation |
 
-### Skills (Version Controlled)
+After install, these are linked into `~/.codex`, which means they are available across projects on the machine. Project specific `AGENTS.md` files can still add or override instructions inside individual repos.
 
-All skills are stored in `config/codex/skills/` and version-controlled with your dotfiles. When you run the installer on a new Mac, all skills are immediately available.
+For a human friendly overview of the available skills, see [SKILLS_GUIDE.md](/Users/grayghost/Sites/dotfiles/SKILLS_GUIDE.md).
 
-**Custom Skills:**
-- `ray-skill` - Ray debugging integration
-- `fix-github-issue` - GitHub issue automation
-- `convert-issue-to-discussion` - GitHub workflow helpers
+## Terminal.app Backup and Restore
 
-**Imported Skills:**
-- `vercel-labs/agent-skills` - Web design guidelines and React best practices
-- `anthropic/skills` - Frontend design and skill creation tools
-- `vercel-labs/agent-browser` - Browser automation
-- `expo/skills` - React Native with Expo
-- `callstackincubator/agent-skills` - React Native performance
-- `coreyhaines31/marketingskills` - Copywriting and programmatic SEO
-- `copy-editing` - Marketing copy editing
-- `copywriting` - Marketing copywriting
-- `frontend-design` - Frontend design patterns
-- `pdf` - PDF manipulation
-- `seo-audit` - SEO auditing
-- `web-design-guidelines` - Web design best practices
+This repo stores the current Terminal.app configuration in `home/terminal.plist`.
 
-### Adding New Skills
+That file exists so I can keep the Terminal look I already like, even after wiping the machine and reinstalling macOS.
 
-```bash
-# Install a new skill (adds directly to your dotfiles)
-npx skills add <owner/repo>
+The workflow is simple:
 
-# Commit to version control
-cd ~/.dotfiles
-git add config/codex/skills/
-git commit -m "Add new skill"
-git push
-```
+1. Customize Terminal.app until it looks right.
+2. Run `./backup.sh`.
+3. Commit the updated `home/terminal.plist`.
+4. On a new machine, run `./install.sh` to import it.
 
-Browse more skills at [skills.sh](https://skills.sh)
+## Git Setup Notes
 
----
+The current Git config was inherited from the original repo and should be personalized before relying on it.
 
-## Customization
+At minimum, review:
 
-### Personal Aliases & Functions
+1. `user.name`
+2. `user.email`
+3. `user.signingkey`
+4. `core.excludesfile`
 
-Create custom configurations that won't be committed:
+Those values often need to be machine or person specific.
 
-```bash
-mkdir -p ~/.dotfiles-custom/shell
-code ~/.dotfiles-custom/shell/.aliases
-```
+## VS Code and Editor Notes
 
-These files are automatically loaded by `.zshrc` if they exist.
+This repo no longer carries Vim specific setup. The Homebrew snapshot can still include VS Code related items, and the Brewfile generated from the machine may also include VS Code extensions through `brew bundle dump`.
 
-### Project-Specific Variables
+If I want to keep editor state beyond extensions, that would be a separate backup path from this repo.
 
-Use `direnv` for automatic environment loading:
+## Keeping This Repo Current
 
-```bash
-cd my-project
-echo 'export DEBUG=true' > .envrc
-direnv allow
-```
+When I change the machine setup, this is the normal maintenance cycle:
 
-Variables load when you enter the directory and unload when you leave.
+1. Install or remove tools.
+2. Adjust Terminal.app if needed.
+3. Run `./backup.sh`.
+4. Review `config/Brewfile` and `home/terminal.plist`.
+5. Commit the changes.
 
----
-
-## Post-Installation
-
-1. **Restore settings** (optional): Run `mackup restore` if you have backups
-
-2. **Migrate history** (upgrading only): Run `migration/migrate-z-to-zoxide.sh` if you have `~/.z`
-
----
-
-## Tool Comparisons
-
-| Old Tool | New Tool | Why Better |
-|----------|----------|------------|
-| z.sh / autojump | zoxide | Smarter frecency algorithm, Rust speed |
-| nvm | fnm | 40x faster, simpler, Rust-based |
-| cat | bat | Syntax highlighting, git integration |
-| ls | eza | Icons, tree view, git status |
-| grep | ripgrep | 5-10x faster, respects .gitignore |
-| find | fd | Simpler syntax, 10x faster |
-| diff | delta | Side-by-side diffs, syntax highlighting |
-| htop | bottom | Better UI, graphs, Rust-based |
-
----
-
-## Utilities
-
-The `bin/` directory contains helper scripts:
-
-- **install** - Main installation script (idempotent, safe to re-run)
-- **update** - Update dotfiles, Homebrew, npm, and Composer packages
-- **doctor** - Health check and diagnostic tool
-
----
-
-## Migration Notes
-
-If upgrading from an older setup:
-
-1. **Directory history**: Run `migration/migrate-z-to-zoxide.sh` to import your `~/.z` data
-2. **Version managers**:
-   - fnm replaces nvm for Node.js
-   - Homebrew manages PHP/Composer (no more compilation or mise)
-3. **Terminal**: Ghostty config can be symlinked from dotfiles if you use Ghostty
-4. **Codex Skills**: Now version-controlled in `config/codex/skills/` and symlinked to `~/.codex/skills`
-
----
+That keeps the repo aligned with the machine instead of letting the README and install scripts drift.
 
 ## Credits
 
-Created by [Freek Van der Herten](https://github.com/freekmurze). Used by many at [Spatie](https://spatie.be).
-
-See `config/Brewfile` for complete package list.
+This setup started from [Freek Van der Herten](https://github.com/freekmurze)'s dotfiles and has been reduced into a smaller, more personal machine snapshot. I will make edits to it often to add more functionality. 
